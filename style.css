@@ -1,0 +1,75 @@
+body {
+  background: #0f0f14;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
+  max-width: 480px; /* was 900 */
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+h2 {
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-weight: 600;
+  margin: 0;
+}
+
+section {
+  margin-bottom: 40px;
+}
+
+#banners {
+  display: flex;
+  flex-wrap: wrap;      /* allow banners to go to next row */
+  gap: 15px;            /* spacing between banners */
+  justify-content: center;  /* was flex-start */
+}
+
+.banner {
+  width: 230px;         /* your fixed width */
+  background: #1a1a22;
+  padding: 15px; /* was 25 */
+  border-radius: 12px;
+  margin-bottom: 0;     /* remove bottom margin, gap handles spacing */
+  box-sizing: border-box;
+}
+
+.banner-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.banner-header img {
+  width: 100px;
+  border-radius: 12px;
+}
+
+.countdown {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #bbb;
+  font-weight: 400;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+
+.task input {
+  margin-right: 12px;
+  width: 18px;
+  height: 18px;
+}
