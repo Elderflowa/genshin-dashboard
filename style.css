@@ -33,11 +33,6 @@ section {
   gap: 15px;            /* spacing between banners */
   justify-content: center;  /* was flex-start */
 }
-@media (max-width: 768px) {
-  .banner {
-    scale: 0.6;
-  }
-}
 .banner {
   width: 230px; /* your fixed width */
   scale: 1;
