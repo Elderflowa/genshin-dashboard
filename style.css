@@ -35,7 +35,8 @@ section {
 }
 
 .banner {
-  width: 230px;         /* your fixed width */
+  width: 230px; /* your fixed width */
+  scale: 0.9;
   background: #1a1a22;
   padding: 15px; /* was 25 */
   border-radius: 12px;
