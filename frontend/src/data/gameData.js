@@ -45,6 +45,7 @@ export const charIcon = (id) => {
 // WEAPON ICONS - paimon.moe snake_case weapon IDs
 const WEAPON_ICON_OVERRIDES = {
   'prospectors_shovel': "https://static.wikia.nocookie.net/gensin-impact/images/f/fc/Weapon_Prospector%27s_Shovel.png",
+  'wolf_fang': 'https://paimon.moe/images/weapons/wolf-fang.png',
   // ── Newer weapons not on paimon.moe — icy-veins CDN ──
   'azurelight': 'https://static.icy-veins.com/images/genshin-impact/weapons/azurelight.webp',
   'lightbearing_moonshard': 'https://static.icy-veins.com/images/genshin-impact/weapons/lightbearing-moonshard.webp',
@@ -195,6 +196,7 @@ export const WEAPONS = [
   {id:'fleuve_cendre_ferryman',        name:'Fleuve Cendre Ferryman',          type:'Sword',    rarity:4, domainMat:'broken_goblet'},
   {id:'finale_of_the_deep',            name:'Finale of the Deep',              type:'Sword',    rarity:4, domainMat:'ancient_chord'},
   {id:'sword_of_narzissenkreuz',       name:'Sword of Narzissenkreuz',         type:'Sword',    rarity:4, domainMat:'broken_goblet'},
+  {id:'wolf_fang',                     name:'Wolf-Fang',                       type:'Sword',    rarity:4, domainMat:'decarabian'},
   {id:'sword_of_descension',           name:'Sword of Descension',             type:'Sword',    rarity:4, domainMat:'boreal_wolf'},
 
   // ── 5★ Claymores ──
