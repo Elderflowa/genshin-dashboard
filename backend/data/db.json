@@ -1,0 +1,16 @@
+{
+  "4bad2eaec5cd6571264fa0de990ab015b08d9ecfa290aec10c06f3d2bece51ac": {
+    "data": {
+      "tv_chars": "{\"flins\":{\"id\":\"flins\",\"talents\":{\"aa\":9,\"e\":9,\"q\":9},\"ascension\":0,\"level\":90,\"artifactSet\":\"night_of_the_skys_unveiling\",\"weapon\":\"prospectors_shovel\",\"notes\":\"\"},\"sucrose\":{\"id\":\"sucrose\",\"talents\":{\"aa\":9,\"e\":9,\"q\":9},\"ascension\":6,\"level\":90,\"artifactSet\":\"none\",\"weapon\":\"\",\"notes\":\"\"},\"aino\":{\"id\":\"aino\",\"talents\":{\"aa\":9,\"e\":9,\"q\":9},\"ascension\":0,\"level\":1,\"artifactSet\":\"none\",\"weapon\":\"\",\"notes\":\"\"}}",
+      "tv_teams": "[{\"id\":1773700948276,\"name\":\"Team Flins\",\"slots\":[\"flins\",\"ineffa\",\"aino\",\"sucrose\"],\"notes\":\"\"},{\"id\":1773700970272,\"name\":\"Team Arle\",\"slots\":[\"arlecchino\",\"yelan\",\"kazuha\",\"bennett\"],\"notes\":\"\"}]",
+      "tv_weapons_owned": "{\"the_first_great_magic_sword\":{\"level\":1},\"jadefall_splendor\":{\"level\":1},\"nightweaver_looking_glass\":{\"level\":1},\"silvershade_sunbird\":{\"level\":1},\"tullaytullah_remembrance\":{\"level\":1},\"the_wind_and_the_star\":{\"level\":1},\"blackcliff_crossbow\":{\"level\":1},\"chain_of_the_red_spider\":{\"level\":1},\"makhairas_aquila\":{\"level\":1},\"master_key\":{\"level\":1},\"nightweaver_ball_earring\":{\"level\":1},\"snare_hook\":{\"level\":1},\"prospectors_shovel\":{\"level\":90}}",
+      "tv_daily": "{\"key\":\"2026-03-17\",\"checks\":{\"expedition\":false}}",
+      "tv_weekly": "{\"key\":\"2026-03-16\",\"checks\":{\"w_wolf\":false,\"w_childe\":false,\"w_azhdaha\":false,\"w_scaramouche\":false,\"w_raiden\":false,\"w_apep\":false,\"w_knave\":true,\"w_natlan\":true}}",
+      "tv_monthly": "{\"key\":\"2026-03\",\"checks\":{\"m_abyss\":true}}",
+      "tv_active_team": "\"1773700948276\"",
+      "tv_ev_dismissed": "[]",
+      "tv_plants_ts": "1773747711987"
+    },
+    "updatedAt": "2026-03-17T13:46:28.710Z"
+  }
+}
