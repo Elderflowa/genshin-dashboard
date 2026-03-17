@@ -683,25 +683,34 @@ function ResinCard({ activeTeamId, onChange }) {
 
   // Priority 1: domain if farmable today
   if(domainFarmable) {
-    // Collect the specific domain names relevant to this team today
-    const relevantDomains = new Set()
+    // Collect the specific talent book names and weapon mat names relevant to this team today
+    const relevantTalents = new Set()
+    const relevantWeapMats = new Set()
     memberIds.forEach(charId => {
       const def = CHARACTERS.find(c=>c.id===charId); if(!def) return
       const cd  = trackedChars[charId]; const talents = cd?.talents||{}
       if(Math.max(talents.aa||1,talents.e||1,talents.q||1)<9)
-        activeTalentDomains.forEach(d=>{ if(d.drops.includes(def.talentBook)) relevantDomains.add(d.name) })
+        activeTalentDomains.forEach(d=>{ if(d.drops.includes(def.talentBook)) relevantTalents.add(TALENT_BOOKS[def.talentBook]?.name||def.talentBook) })
       const weapon = WEAPONS.find(w=>w.id===cd?.weapon)
       const weaponLvl = getWeaponLevel(cd?.weapon)
       if(weapon && weaponLvl<90)
-        activeWeaponDomains.forEach(d=>{ if(d.drops.includes(weapon.domainMat)) relevantDomains.add(d.name) })
+        activeWeaponDomains.forEach(d=>{ if(d.drops.includes(weapon.domainMat)) relevantWeapMats.add(WEAPON_MATS[weapon.domainMat]?.name||weapon.domainMat) })
     })
-    const domainNames = [...relevantDomains].join(' · ') || 'Farm today for active team'
+    const talentList = [...relevantTalents]
+    const weapMatList = [...relevantWeapMats]
+    const formatList = (arr, suffix) => {
+      if(!arr.length) return null
+      if(arr.length===1) return `${arr[0]} (${suffix})`
+      if(arr.length===2) return `${arr[0]} and ${arr[1]} (${suffix})`
+      return `${arr.slice(0,-1).join(', ')} and ${arr[arr.length-1]} (${suffix})`
+    }
+    const parts = [formatList(talentList,'Talents'), formatList(weapMatList,'Weapons')].filter(Boolean)
     plan.push({
-      label: domainNames,
+      label: parts.join(' · ') || 'Farm today',
       cost: 20,
       tag: `Talent / Weapon domain — ${activeTeam?.name||'active team'}`,
       urgent: false,
-      icon: 'https://static.wikia.nocookie.net/gensin-impact/images/d/d2/System_Talent.png/revision/latest?cb=20210911040808',
+      icon: 'https://static.wikia.nocookie.net/gensin-impact/images/3/33/Item_Teachings_of_Resistance.png',
     })
   }
 
