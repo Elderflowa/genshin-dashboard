@@ -17,3 +17,15 @@ It also has support for seeing current banners and events, a simple team builder
 | ---------------------------------------------------------------------------------------------- |
 | <img src="https://raw.githubusercontent.com/Elderflowa/travelers-guide/refs/heads/main/example.png" alt="Homepage" /> |
 ---
+
+## Running in Docker
+### Clone
+Clone this repository:
+```
+git clone https://github.com/Elderflowa/travelers-guide
+cd travelers-guide
+```
+### Run with compose
+```
+docker compose up -d
+```
