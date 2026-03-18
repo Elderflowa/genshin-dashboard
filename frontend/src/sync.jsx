@@ -211,14 +211,49 @@ export function SyncBadge() {
   const { passHash, status, lastSync, saveToServer, clearPassphrase, setShowModal } = useSync()
   const [menuOpen,      setMenuOpen]      = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
-  const menuRef = React.useRef(null)
+  const [importError,   setImportError]   = useState(null)
+  const [exportJson,    setExportJson]    = useState(null)
+
+  const menuRef   = React.useRef(null)
+  const importRef = React.useRef(null)
+
+  const TV_KEYS = ['tv_chars','tv_teams','tv_weapons_owned','tv_daily','tv_weekly',
+                   'tv_monthly','tv_active_team','tv_cal','tv_theme',
+                   'tv_crystal_ts','tv_plants_ts','tv_ev_dismissed']
+
+
+
+  const handleImport = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result)
+        let count = 0
+        TV_KEYS.forEach(k => {
+          if (data[k] !== undefined) {
+            localStorage.setItem(k, JSON.stringify(data[k]))
+            count++
+          }
+        })
+        setImportError(null)
+        setMenuOpen(false)
+        window.location.reload()
+      } catch {
+        setImportError('Invalid file — could not parse JSON')
+      }
+    }
+    reader.readAsText(file)
+    e.target.value = ''
+  }
 
   // Close menu on outside click
   React.useEffect(() => {
     if (!menuOpen) return
     const handler = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false) }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
+    document.addEventListener('click', handler)
+    return () => document.removeEventListener('click', handler)
   }, [menuOpen])
 
   const fmtTime = (iso) => {
@@ -261,6 +296,35 @@ export function SyncBadge() {
   // ── Logged in ──
   return (
     <>
+      {/* Export modal */}
+      {exportJson && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.75)',zIndex:1001,display:'flex',alignItems:'center',justifyContent:'center'}}
+          onClick={()=>setExportJson(null)}>
+          <div style={{background:'var(--panel)',border:'1px solid var(--border)',borderRadius:12,padding:'24px 28px',width:460,display:'flex',flexDirection:'column',gap:14}}
+            onClick={e=>e.stopPropagation()}>
+            <div style={{fontSize:'1rem',fontWeight:700,color:'var(--text)'}}>Export data</div>
+            <div style={{fontSize:'.75rem',color:'var(--text3)',lineHeight:1.5}}>
+              Copy the JSON below and save it as a <code>.json</code> file to back up your data.
+            </div>
+            <textarea readOnly value={exportJson}
+              onClick={e=>e.target.select()}
+              style={{width:'100%',height:180,fontSize:'.65rem',fontFamily:'monospace',
+                background:'var(--card)',color:'var(--text2)',border:'1px solid var(--border)',
+                borderRadius:8,padding:8,resize:'none',boxSizing:'border-box'}}/>
+            <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}>
+              <button className="btn" onClick={()=>setExportJson(null)}
+                style={{background:'transparent',border:'1px solid var(--border)',color:'var(--text2)'}}>
+                Close
+              </button>
+              <button className="btn" onClick={()=>navigator.clipboard.writeText(exportJson).then(()=>{}).catch(()=>{})}
+                style={{background:'rgba(var(--accent),0.9)',color:'#fff',border:'none'}}>
+                Copy to clipboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Delete confirmation modal */}
       {confirmDelete && (
         <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.75)',zIndex:1001,display:'flex',alignItems:'center',justifyContent:'center'}}>
@@ -329,6 +393,67 @@ export function SyncBadge() {
               <span style={{animation:status==='syncing'?'spin 1s linear infinite':'none',display:'inline-block'}}>{syncIcon}</span>
               {syncLabel}
             </button>
+
+            <div style={{height:1,background:'var(--border)',margin:'0 10px'}}/>
+
+            {/* Export data */}
+            <button onClick={async ()=>{
+              const data = {}
+              TV_KEYS.forEach(k => { try { const v = localStorage.getItem(k); if(v!==null) data[k]=JSON.parse(v) } catch{} })
+              try {
+                const res = await fetch('/api/export', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${passHash}` },
+                  body: JSON.stringify({ data })
+                })
+                if (res.ok) {
+                  const blob = await res.blob()
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.href = url
+                  a.download = `travelers-guide-${new Date().toISOString().slice(0,10)}.json`
+                  document.body.appendChild(a)
+                  a.click()
+                  document.body.removeChild(a)
+                  URL.revokeObjectURL(url)
+                  setMenuOpen(false)
+                  return
+                }
+              } catch {}
+              // Fallback: show modal
+              setExportJson(JSON.stringify(data, null, 2))
+              setMenuOpen(false)
+            }} style={{
+              display:'flex', alignItems:'center', gap:10, padding:'10px 14px',
+              background:'transparent', border:'none', cursor:'pointer',
+              color:'var(--text2)', fontSize:'.78rem', textAlign:'left',
+              transition:'background .1s'
+            }}
+            onMouseEnter={e=>e.currentTarget.style.background='var(--hover)'}
+            onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Export data
+            </button>
+
+            {/* Import data */}
+            <input ref={importRef} type="file" accept=".json" onChange={handleImport}
+              style={{display:'none'}}/>
+            <button onClick={()=>importRef.current?.click()} style={{
+              display:'flex', alignItems:'center', gap:10, padding:'10px 14px',
+              background:'transparent', border:'none', cursor:'pointer',
+              color:'var(--text2)', fontSize:'.78rem', textAlign:'left',
+              transition:'background .1s'
+            }}
+            onMouseEnter={e=>e.currentTarget.style.background='var(--hover)'}
+            onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              Import data
+            </button>
+            {importError && <div style={{fontSize:'.7rem',color:'#e57',padding:'4px 14px 8px'}}>{importError}</div>}
 
             <div style={{height:1,background:'var(--border)',margin:'0 10px'}}/>
 

@@ -72,6 +72,17 @@ app.delete('/api/sync', auth, (req, res) => {
   res.json({ ok: true })
 })
 
+// POST /api/export — receive data from client, return as downloadable JSON file
+app.post('/api/export', auth, (req, res) => {
+  const { data } = req.body
+  if (!data || typeof data !== 'object') return res.status(400).json({ error: 'Invalid data' })
+  const filename = `travelers-guide-${new Date().toISOString().slice(0,10)}.json`
+  const json = JSON.stringify(data, null, 2)
+  res.setHeader('Content-Type', 'application/json')
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+  res.send(json)
+})
+
 // Health check
 app.get('/api/health', (_, res) => res.json({ ok: true }))
 

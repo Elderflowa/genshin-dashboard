@@ -543,17 +543,15 @@ function FarmAlertBanner({ activeTeamId }) {
     const def=CHARACTERS.find(c=>c.id===charId); if(!def) return
     const talents = trackedChars[charId]?.talents||{}
     const maxTalent = Math.max(talents.aa||1, talents.e||1, talents.q||1)
-    if(maxTalent < 9) activeTalentDomains.forEach(dom=>{ if(dom.drops.includes(def.talentBook)) alerts.push(`${def.name} talent (${TALENT_BOOKS[def.talentBook]?.name})`) })
-    const weapon=WEAPONS.find(w=>w.id===trackedChars[charId]?.weapon)
-    const weaponLvl = getWeaponLevel(trackedChars[charId]?.weapon)
-    if(weapon && weaponLvl < 90) activeWeaponDomains.forEach(dom=>{ if(dom.drops.includes(weapon.domainMat)) alerts.push(`${def.name} weapon (${WEAPON_MATS[weapon.domainMat]?.name})`) })
+    if(maxTalent < 9) activeTalentDomains.forEach(dom=>{ if(dom.drops.includes(def.talentBook)) alerts.push(`${def.name} (${TALENT_BOOKS[def.talentBook]?.name})`) })
+    // weapon alerts removed — talents only
   })
   if(!alerts.length) return null
   return (
-    <div className="domain-alert" style={{marginBottom:14}}>
+    <div className="domain-alert" style={{marginBottom:14,background:'rgba(var(--accent),0.12)',borderColor:'rgba(var(--accent),0.3)'}}>
       <span className="domain-alert-icon">⚡</span>
       <div style={{minWidth:0}}>
-        <div className="domain-alert-text">Farm available today — {activeTeam.name}</div>
+        <div className="domain-alert-text" style={{color:'rgba(var(--accent),0.9)'}}>Talents available today ({activeTeam.name})</div>
         <div className="domain-alert-names">{alerts.slice(0,4).join(' · ')}{alerts.length>4?` +${alerts.length-4} more`:''}</div>
       </div>
     </div>
@@ -672,54 +670,29 @@ function ResinCard({ activeTeamId, onChange }) {
   const domainFarmable = memberIds.some(charId=>{
     const def=CHARACTERS.find(c=>c.id===charId); if(!def) return false
     const cd=trackedChars[charId]; const talents=cd?.talents||{}
-    if(Math.max(talents.aa||1,talents.e||1,talents.q||1)<9 && activeTalentDomains.some(d=>d.drops.includes(def.talentBook))) return true
-    const weapon=WEAPONS.find(w=>w.id===cd?.weapon)
-    const weaponLvl=getWeaponLevel(cd?.weapon)
-    return weapon && weaponLvl<90 && activeWeaponDomains.some(d=>d.drops.includes(weapon.domainMat))
+    return Math.max(talents.aa||1,talents.e||1,talents.q||1)<9 && activeTalentDomains.some(d=>d.drops.includes(def.talentBook))
   })
 
-  // Build spend plan — one primary, one filler
-  const plan = []
-
-  // Priority 1: domain if farmable today
-  if(domainFarmable) {
-    // Collect the specific talent book names and weapon mat names relevant to this team today
-    const relevantTalents = new Set()
-    const relevantWeapMats = new Set()
-    memberIds.forEach(charId => {
-      const def = CHARACTERS.find(c=>c.id===charId); if(!def) return
-      const cd  = trackedChars[charId]; const talents = cd?.talents||{}
-      if(Math.max(talents.aa||1,talents.e||1,talents.q||1)<9)
-        activeTalentDomains.forEach(d=>{ if(d.drops.includes(def.talentBook)) relevantTalents.add(TALENT_BOOKS[def.talentBook]?.name||def.talentBook) })
-      const weapon = WEAPONS.find(w=>w.id===cd?.weapon)
-      const weaponLvl = getWeaponLevel(cd?.weapon)
-      if(weapon && weaponLvl<90)
-        activeWeaponDomains.forEach(d=>{ if(d.drops.includes(weapon.domainMat)) relevantWeapMats.add(WEAPON_MATS[weapon.domainMat]?.name||weapon.domainMat) })
-    })
-    const talentList = [...relevantTalents]
-    const weapMatList = [...relevantWeapMats]
-    const formatList = (arr, suffix) => {
-      if(!arr.length) return null
-      if(arr.length===1) return `${arr[0]} (${suffix})`
-      if(arr.length===2) return `${arr[0]} and ${arr[1]} (${suffix})`
-      return `${arr.slice(0,-1).join(', ')} and ${arr[arr.length-1]} (${suffix})`
-    }
-    const parts = [formatList(talentList,'Talents'), formatList(weapMatList,'Weapons')].filter(Boolean)
-    plan.push({
-      label: parts.join(' · ') || 'Farm today',
-      cost: 20,
-      tag: `Talent / Weapon domain — ${activeTeam?.name||'active team'}`,
-      urgent: false,
-      icon: 'https://static.wikia.nocookie.net/gensin-impact/images/3/33/Item_Teachings_of_Resistance.png',
-    })
+  // Helpers
+  const formatList = (arr, suffix) => {
+    if(!arr.length) return null
+    if(arr.length===1) return `${arr[0]} (${suffix})`
+    if(arr.length===2) return `${arr[0]} and ${arr[1]} (${suffix})`
+    return `${arr.slice(0,-1).join(', ')} and ${arr[arr.length-1]} (${suffix})`
   }
+  const dayMod2 = Math.floor(Date.now()/86400000) % 2
+  const filler = dayMod2 === 0
+    ? {label:'XP',   cost:20, tag:'Ley Line — Blossom of Revelation', urgent:false, icon:'https://static.wikia.nocookie.net/gensin-impact/images/0/07/Item_Adventurer%27s_Experience.png/revision/latest?cb=20201116222310'}
+    : {label:'Mora', cost:20, tag:'Ley Line — Blossom of Wealth',     urgent:false, icon:'https://static.wikia.nocookie.net/gensin-impact/images/8/84/Item_Mora.png/revision/latest?cb=20210106073715'}
 
-  // Priority 2: weekly boss — prefer if urgent (≤2 days) or domain not farmable
-  if(pendingBosses.length>0 && (daysUntilReset<=2 || !domainFarmable)) {
+  const artifactEntry = {label:'Artifacts', cost:20, tag:'Artifact domain run', urgent:false, icon:'https://paimon.moe/images/artifacts/gladiators_finale_flower.png'}
+
+  const makeBossEntry = () => {
+    if(!pendingBosses.length) return null
     const boss = pendingBosses[0]
     const bossData = WEEKLY_BOSSES_FULL.find(b=>b.id===boss.id)
     const urgent = daysUntilReset<=2
-    plan.push({
+    return {
       label: boss.label,
       cost: nextBossResin,
       icon: bossData?.icon,
@@ -729,17 +702,41 @@ function ResinCard({ activeTeamId, onChange }) {
           ? `Weekly boss · ${discountLeft} discounted run${discountLeft>1?'s':''} left`
           : 'Weekly boss · full cost',
       urgent,
-    })
+    }
   }
 
-  // Filler: rotate XP Books → Mora → Artifacts by day (one filler only)
-  const dayMod3 = Math.floor(Date.now()/86400000) % 3
-  const fillers = [
-    {label:'XP',       cost:20, tag:'Ley Line — Blossom of Revelation', urgent:false, icon:'https://static.wikia.nocookie.net/gensin-impact/images/0/07/Item_Adventurer%27s_Experience.png/revision/latest?cb=20201116222310'},
-    {label:'Mora',     cost:20, tag:'Ley Line — Blossom of Wealth',     urgent:false, icon:'https://static.wikia.nocookie.net/gensin-impact/images/8/84/Item_Mora.png/revision/latest?cb=20210106073715'},
-    {label:'Artifacts',cost:20, tag:'Artifact domain run',               urgent:false, icon:'https://genshin-impact.fandom.com/wiki/Special:FilePath/System_Artifacts.png'},
-  ]
-  if(plan.length < 2) plan.push(fillers[dayMod3])
+  // Build plan — always exactly 2 slots
+  // Slot 1: talent domain if farmable today, otherwise weekly boss
+  // Slot 2: always XP/Mora/Artifacts rotation
+  const plan = []
+
+  if(domainFarmable) {
+    // Slot 1: talents
+    const relevantTalents = new Set()
+    memberIds.forEach(charId => {
+      const def = CHARACTERS.find(c=>c.id===charId); if(!def) return
+      const cd  = trackedChars[charId]; const talents = cd?.talents||{}
+      if(Math.max(talents.aa||1,talents.e||1,talents.q||1)<9)
+        activeTalentDomains.forEach(d=>{ if(d.drops.includes(def.talentBook)) relevantTalents.add(TALENT_BOOKS[def.talentBook]?.name||def.talentBook) })
+    })
+    plan.push({
+      label: formatList([...relevantTalents],'Talents') || 'Farm today',
+      cost: 20,
+      tag: `Talent domain — ${activeTeam?.name||'active team'}`,
+      urgent: false,
+      icon: 'https://static.wikia.nocookie.net/gensin-impact/images/3/33/Item_Teachings_of_Resistance.png',
+    })
+  } else if(claimedCount < 3) {
+    // No talents + <3 bosses done — slot 1 is weekly boss
+    const bossEntry = makeBossEntry()
+    if(bossEntry) plan.push(bossEntry)
+  } else {
+    // No talents + 3 bosses done — slot 1 is artifacts
+    plan.push(artifactEntry)
+  }
+
+  // Slot 2: always XP/Mora rotation
+  plan.push(filler)
 
   return (
     <div className="card">
@@ -919,14 +916,12 @@ function BuildingSection({ activeTeamId, onTeamSelect }) {
             if(!def) return null
             const el=ELEMENTS[def.element]
             const ic=charIcon(def.id)
-            const hasTalent = activeTalentDomains.some(d=>d.drops.includes(def.talentBook))
-            // Weapon domain: only if weapon configured in Characters tab
-            const equippedWeapon = WEAPONS.find(w=>w.id===trackedChars[charId]?.weapon)
-            const hasWeapon = equippedWeapon
-              ? activeWeaponDomains.some(d=>d.drops.includes(equippedWeapon.domainMat))
-              : false
+            const cd=trackedChars[charId]
+            const talents=cd?.talents||{}
+            const weaponLvl=getWeaponLevel(cd?.weapon)
+            const fullyBuilt = Math.min(talents.aa||1,talents.e||1,talents.q||1)>=9 && weaponLvl>=90 && (cd?.level||1)>=90
             return (
-              <div className={`build-char-card${hasTalent||hasWeapon?' farm-today':''}`} key={charId}>
+              <div className={`build-char-card${fullyBuilt?' built':''}`} key={charId}>
                 <div className="build-char-av-wrap">
                   {ic
                     ? <img className="build-char-av" src={ic} alt={def.name} onError={e=>{e.target.style.opacity=0}}/>
@@ -934,15 +929,19 @@ function BuildingSection({ activeTeamId, onTeamSelect }) {
                         {el&&<img src={el.icon} style={{width:18,height:18}} alt={def.element} onError={e=>{e.target.style.display='none'}}/>}
                       </div>
                   }
-                  {(hasTalent||hasWeapon) && <div className="farm-pip" title="Farm available today!">⚡</div>}
+                  {fullyBuilt && (
+                    <div className="built-check">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </div>
+                  )}
                 </div>
                 <div className="build-char-name">{def.name}</div>
                 <div className="build-char-el" style={{color:`rgba(${el?.rgb||'200,169,110'},0.85)`}}>
                   {el&&<img src={el.icon} style={{width:10,height:10,marginRight:2}} alt={def.element} onError={e=>{e.target.style.display='none'}}/>}
                   {def.element}
                 </div>
-                {hasTalent && <div className="farm-tag">Talent</div>}
-                {hasWeapon && <div className="farm-tag">Weapon</div>}
               </div>
             )
           })}

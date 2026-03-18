@@ -159,15 +159,14 @@ select.input option{background:var(--card)}
 /* Currently building – team mode */
 .building-section{margin-top:14px}
 .build-team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
-.build-char-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 7px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;transition:border-color .13s;position:relative}
+.build-char-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 7px 8px;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;transition:border-color .13s,background .13s;position:relative}
 .build-char-card:hover{border-color:var(--borderlt)}
-.build-char-card.farm-today{border-color:rgba(var(--goldr),.45);background:rgba(var(--goldr),.05)}
-.build-char-av-wrap{position:relative;width:46px;height:46px}
-.build-char-av{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--border);background:var(--input)}
-.farm-pip{position:absolute;bottom:-2px;right:-2px;font-size:.7rem;background:rgba(var(--goldr),.15);border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;line-height:1}
+.build-char-card.built{border-color:rgba(var(--ok),0.5);background:rgba(var(--ok),0.07)}
+.build-char-av-wrap{position:relative;width:68px;height:68px}
+.build-char-av{width:68px;height:68px;border-radius:50%;object-fit:cover;border:2px solid var(--border);background:var(--input)}
+.built-check{position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:rgba(var(--ok),0.9);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--card)}
 .build-char-name{font-size:.72rem;font-weight:600;color:var(--text);line-height:1.2;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .build-char-el{font-size:.6rem;color:var(--text3);display:flex;align-items:center}
-.farm-tag{font-size:.6rem;background:rgba(var(--goldr),.12);color:var(--gold);border-radius:4px;padding:1px 5px;white-space:nowrap}
 
 /* Legacy build-row kept for potential reuse */
 .build-list{display:flex;flex-direction:column;gap:8px}
