@@ -15,5 +15,5 @@ It also has support for seeing current banners and events, a simple team builder
 ## Screenshot
 | Homepage                                                                             |
 | ---------------------------------------------------------------------------------------------- |
-| <img src="https://raw.githubusercontent.com/Elderflowa/honey-dynamic/refs/heads/main/example.png" alt="Configuration" /> |
+| <img src="https://raw.githubusercontent.com/Elderflowa/travelers-guide/refs/heads/main/example.png" alt="Homepage" /> |
 ---
