@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { CHARACTERS, ELEMENTS, TALENT_DOMAINS, WEAPON_DOMAINS, TALENT_BOOKS, WEAPON_MATS, WEAPONS, charIcon } from '../data/gameData.js'
+import { CHARACTERS, ELEMENTS, TALENT_DOMAINS, WEAPON_DOMAINS, TALENT_BOOKS, WEAPON_MATS, WEAPONS, WEEKLY_BOSSES_INFO, charIcon } from '../data/gameData.js'
+import { CharCard } from './CharactersTab.jsx'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 const ls = k => { try { return JSON.parse(localStorage.getItem(k)) } catch { return null } }
@@ -315,7 +316,7 @@ function EventsStrip({ data }) {
   if (!withImages.length) return null
 
   return (
-    <div>
+    <div style={{overflow:'hidden',width:'100%'}}>
       <div className="stitle" style={{display:'flex',alignItems:'center',gap:8}}>
         Active Events & Challenges
         {dismissed.length > 0 && (
@@ -411,7 +412,7 @@ function CrystalFlyRow({ checks, toggle, onChange }) {
 
   return (
     <div onClick={!cooldownActive && !isDone ? markDone : undefined} style={{
-      display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,
+      display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,overflow:'hidden',
       cursor:cooldownActive||isDone?'default':'pointer',
       background:isDone||cooldownActive?'rgba(var(--ok),0.07)':'var(--card)',
       border:`1px solid ${isDone||cooldownActive?'rgba(var(--ok),0.25)':'var(--border)'}`,
@@ -466,7 +467,7 @@ function WeeklyCard({ onChange }) {
       <div style={{display:'flex',flexDirection:'column',gap:4,marginBottom:12}}>
         {WEEKLY_BOSSES_FULL.map(b=>(
           <div key={b.id} onClick={()=>toggle(b.id)} style={{
-            display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,cursor:'pointer',
+            display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,cursor:'pointer',overflow:'hidden',
             background:checks[b.id]?'rgba(var(--ok),0.07)':'var(--card)',
             border:`1px solid ${checks[b.id]?'rgba(var(--ok),0.25)':'var(--border)'}`,
             opacity:checks[b.id]?0.65:1,transition:'all .13s',
@@ -501,7 +502,7 @@ function WeeklyCard({ onChange }) {
       <div style={{display:'flex',flexDirection:'column',gap:4}}>
         {WEEKLY_NON_BOSS.map(t=>(
           <div key={t.id} onClick={()=>toggle(t.id)} style={{
-            display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,cursor:'pointer',
+            display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,cursor:'pointer',overflow:'hidden',
             background:checks[t.id]?'rgba(var(--ok),0.07)':'var(--card)',
             border:`1px solid ${checks[t.id]?'rgba(var(--ok),0.25)':'var(--border)'}`,
             opacity:checks[t.id]?0.65:1,transition:'all .13s',
@@ -544,7 +545,7 @@ function MonthlyCard({ onChange }) {
       <div style={{display:'flex',flexDirection:'column',gap:4}}>
         {MONTHLY_TASKS.map(t=>(
           <div key={t.id} onClick={()=>toggle(t.id)} style={{
-            display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,cursor:'pointer',
+            display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,cursor:'pointer',overflow:'hidden',
             background:checks[t.id]?'rgba(var(--ok),0.07)':'var(--card)',
             border:`1px solid ${checks[t.id]?'rgba(var(--ok),0.25)':'var(--border)'}`,
             opacity:checks[t.id]?0.65:1,transition:'all .13s',
@@ -858,7 +859,7 @@ function ResinCard({ activeTeamId, onChange }) {
       <div style={{display:'flex',flexDirection:'column',gap:4}}>
       {plan.map((item,i)=>(
         <div key={i} style={{
-          display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,
+          display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,overflow:'hidden',
           background:'var(--card)',border:'1px solid var(--border)',
         }}>
           {item.icon&&(
@@ -868,9 +869,9 @@ function ResinCard({ activeTeamId, onChange }) {
                 onError={e=>{e.target.style.display='none'}}/>
             </div>
           )}
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{fontSize:'.78rem',fontWeight:600,color:item.urgent?'rgba(var(--five),0.95)':'var(--text)'}}>{item.label}</div>
-            <div style={{fontSize:'.65rem',color:'var(--text3)',marginTop:1}}>{item.tag}</div>
+          <div style={{flex:1,minWidth:0,overflow:'hidden'}}>
+            <div style={{fontSize:'.78rem',fontWeight:600,color:item.urgent?'rgba(var(--five),0.95)':'var(--text)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{item.label}</div>
+            <div style={{fontSize:'.65rem',color:'var(--text3)',marginTop:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{item.tag}</div>
           </div>
           <div style={{
             fontSize:'.7rem',fontWeight:700,flexShrink:0,
@@ -948,7 +949,7 @@ function DailyCard({ onChange }) {
       <div style={{display:'flex',flexDirection:'column',gap:4}}>
         {DAILY_TASKS.map(t=>(
           <div key={t.id} onClick={()=>toggle(t.id)} style={{
-            display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,cursor:'pointer',
+            display:'flex',alignItems:'center',gap:10,padding:'6px 8px',borderRadius:8,cursor:'pointer',overflow:'hidden',
             background:checks[t.id]?'rgba(var(--ok),0.07)':'var(--card)',
             border:`1px solid ${checks[t.id]?'rgba(var(--ok),0.25)':'var(--border)'}`,
             opacity:checks[t.id]?0.65:1,transition:'all .13s',
@@ -962,8 +963,8 @@ function DailyCard({ onChange }) {
               }
               {checks[t.id]&&<div style={{position:'absolute',inset:0,borderRadius:8,background:'rgba(var(--ok),0.55)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'.9rem',color:'#fff',fontWeight:700}}>✓</div>}
             </div>
-            <div style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:'.78rem',fontWeight:600,color:checks[t.id]?'rgba(var(--ok),0.8)':'var(--text)'}}>{t.label}</div>
+            <div style={{flex:1,minWidth:0,overflow:'hidden'}}>
+              <div style={{fontSize:'.78rem',fontWeight:600,color:checks[t.id]?'rgba(var(--ok),0.8)':'var(--text)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{t.label}</div>
             </div>
             {t.badge&&<span className="cbadge" style={{flexShrink:0}}>{t.badge}</span>}
           </div>
@@ -974,7 +975,36 @@ function DailyCard({ onChange }) {
   )
 }
 
-function BuildingSection({ activeTeamId, onTeamSelect }) {
+// ── Char Edit Modal (from Daily tab) ─────────────────────────────────────────
+function CharEditModal({ charId, onChange, onClose }) {
+  const def = CHARACTERS.find(c=>c.id===charId)
+  if(!def) return null
+  const [charData, setCharData] = useState(()=>{
+    const raw = ls('tv_chars')||{}
+    return raw[charId] || {id:charId,talents:{aa:1,e:1,q:1},ascension:0,level:1,artifactSet:'none',weapon:'',notes:''}
+  })
+  const handleUpdate = (d) => {
+    setCharData(d)
+    const raw = ls('tv_chars')||{}
+    raw[charId] = d
+    lss('tv_chars', raw)
+    onChange?.()
+  }
+  return (
+    <div className="char-edit-modal-wrap" style={{position:'fixed',inset:0,zIndex:200,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,0.5)'}}
+      onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
+      <div className="char-edit-modal-inner" style={{width:'100%',maxWidth:480,maxHeight:'90vh',overflowY:'auto',borderRadius:16,background:'var(--panel)',padding:20,margin:16,boxShadow:'0 8px 40px rgba(0,0,0,0.3)'}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+          <span style={{fontWeight:600,fontSize:'.85rem',color:'var(--text)'}}>Edit Character</span>
+          <button onClick={onClose} style={{fontSize:'1rem',color:'var(--text3)',padding:'2px 8px'}}>✕</button>
+        </div>
+        <CharCard charDef={def} charData={charData} onUpdate={handleUpdate} onRemove={onClose}/>
+      </div>
+    </div>
+  )
+}
+
+function BuildingSection({ activeTeamId, onTeamSelect, onCharEdit }) {
   const [teams, setTeams] = useState(()=>ls('tv_teams')||[])
 
   useEffect(()=>{
@@ -1035,7 +1065,7 @@ function BuildingSection({ activeTeamId, onTeamSelect }) {
             const weaponLvl=getWeaponLevel(cd?.weapon)
             const fullyBuilt = Math.min(talents.aa||1,talents.e||1,talents.q||1)>=9 && weaponLvl>=90 && (cd?.level||1)>=90
             return (
-              <div className={`build-char-card${fullyBuilt?' built':''}`} key={charId}>
+              <div className={`build-char-card${fullyBuilt?' built':''}`} key={charId} onClick={()=>onCharEdit&&onCharEdit(charId)} style={{cursor:'pointer'}}>
                 <div className="build-char-av-wrap">
                   {ic
                     ? <img className="build-char-av" src={ic} alt={def.name} onError={e=>{e.target.style.opacity=0}}/>
@@ -1068,6 +1098,7 @@ function BuildingSection({ activeTeamId, onTeamSelect }) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function DailyTab({ onChange }) {
   const [calData, setCalData] = useState(null)
+  const [editingCharId, setEditingCharId] = useState(null)
   const [activeTeamId, setActiveTeamId] = useState(()=>{
     const saved = ls('tv_active_team')
     const allTeams = ls('tv_teams')||[]
@@ -1101,13 +1132,16 @@ export default function DailyTab({ onChange }) {
             <WeeklyCard onChange={onChange}/>
             <MonthlyCard onChange={onChange}/>
           </div>
-          <BuildingSection activeTeamId={activeTeamId} onTeamSelect={handleTeamSelect}/>
+          <BuildingSection activeTeamId={activeTeamId} onTeamSelect={handleTeamSelect} onCharEdit={setEditingCharId}/>
         </div>
         <div>
+    <div className="hide-mobile">
           <TeamQuickPicker activeTeamId={activeTeamId} onTeamSelect={handleTeamSelect}/>
+        </div>
           <BannerSidebar data={calData}/>
         </div>
       </div>
+      {editingCharId && <CharEditModal charId={editingCharId} onChange={onChange} onClose={()=>setEditingCharId(null)}/>}
     </div>
   )
 }

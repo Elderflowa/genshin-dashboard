@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { CHARACTERS, ELEMENTS, charIcon } from '../data/gameData.js'
 
 const ls  = k=>{ try{return JSON.parse(localStorage.getItem(k))}catch{return null} }
@@ -90,6 +90,25 @@ function CharPicker({team,onPick,onClose}){
   )
 }
 
+function AutoSizeTeamInput({ name, onChange }) {
+  const sizerRef = useRef(null)
+  const inputRef = useRef(null)
+  useEffect(() => {
+    if(sizerRef.current && inputRef.current) {
+      inputRef.current.style.width = (sizerRef.current.offsetWidth + 2) + 'px'
+    }
+  }, [name])
+  return (
+    <div style={{display:'inline-flex',alignItems:'center',marginBottom:14,maxWidth:'100%',overflow:'hidden'}}>
+      <span ref={sizerRef} style={{position:'absolute',visibility:'hidden',whiteSpace:'pre',fontWeight:600,
+        fontSize:'.95rem',padding:'5px 10px',fontFamily:'inherit'}}>{name||' '}</span>
+      <input ref={inputRef} className="input" value={name} maxLength={40}
+        onChange={e=>onChange(e.target.value)}
+        style={{fontWeight:600,fontSize:'.95rem',padding:'5px 10px',maxWidth:'100%',boxSizing:'border-box',minWidth:60}}/>
+    </div>
+  )
+}
+
 export default function TeamBuilderTab({ onChange }) {
   const [teams, setTeams]         = useState(loadTeams)
   const [activeIdx, setActiveIdx] = useState(0)
@@ -170,11 +189,7 @@ export default function TeamBuilderTab({ onChange }) {
           <div className="empty"><h3>No teams yet</h3><p>Create a team to get started.</p></div>
         ) : (
           <>
-            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
-              <input className="input" value={team.name}
-                onChange={e=>updateTeam(activeIdx,{name:e.target.value})}
-                style={{fontWeight:600,fontSize:'.95rem',padding:'5px 10px'}}/>
-            </div>
+            <AutoSizeTeamInput name={team.name} onChange={name=>updateTeam(activeIdx,{name})}/>
 
             <div className="team-slots">
               {team.slots.map((charId,si)=>(

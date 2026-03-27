@@ -46,6 +46,31 @@ export const charIcon = (id) => {
 const WEAPON_ICON_OVERRIDES = {
   'prospectors_shovel': "https://static.wikia.nocookie.net/gensin-impact/images/f/fc/Weapon_Prospector%27s_Shovel.png",
   'wolf_fang': 'https://paimon.moe/images/weapons/wolf-fang.png',
+  // ── 3-star weapons with non-standard paimon.moe slugs ──
+  'travelers_handy_sword':   `${PM}/weapons/travelers_handy_sword.png`,
+  'thrilling_tales':         `${PM}/weapons/thrilling_tales_of_dragon_slayers.png`,
+  'sharpshooters_oath':      `${PM}/weapons/sharpshooters_oath.png`,
+  'harbinger_of_dawn':       `${PM}/weapons/harbinger_of_dawn.png`,
+  'bloodtainted_greatsword': `${PM}/weapons/bloodtainted_greatsword.png`,
+  'white_iron_greatsword':   `${PM}/weapons/white_iron_greatsword.png`,
+  'skyrider_greatsword':     `${PM}/weapons/skyrider_greatsword.png`,
+  'skyrider_sword':          `${PM}/weapons/skyrider_sword.png`,
+  'otherworldly_story':      `${PM}/weapons/otherworldly_story.png`,
+  'emerald_orb':             `${PM}/weapons/emerald_orb.png`,
+  'twin_nephrite':           `${PM}/weapons/twin_nephrite.png`,
+  'magic_guide':             `${PM}/weapons/magic_guide.png`,
+  'raven_bow':               `${PM}/weapons/raven_bow.png`,
+  'recurve_bow':             `${PM}/weapons/recurve_bow.png`,
+  'black_tassel':            `${PM}/weapons/black_tassel.png`,
+  'white_tassel':            `${PM}/weapons/white_tassel.png`,
+  'dark_iron_sword':         `${PM}/weapons/dark_iron_sword.png`,
+  'fillet_blade':            `${PM}/weapons/fillet_blade.png`,
+  'ferrous_shadow':          `${PM}/weapons/ferrous_shadow.png`,
+  'cool_steel':              `${PM}/weapons/cool_steel.png`,
+  'debate_club':             `${PM}/weapons/debate_club.png`,
+  'halberd':                 `${PM}/weapons/halberd.png`,
+  'messenger':               `${PM}/weapons/messenger.png`,
+  'slingshot':               `${PM}/weapons/slingshot.png`,
   // ── Newer weapons not on paimon.moe — icy-veins CDN ──
   'azurelight': 'https://static.icy-veins.com/images/genshin-impact/weapons/azurelight.webp',
   'lightbearing_moonshard': 'https://static.icy-veins.com/images/genshin-impact/weapons/lightbearing-moonshard.webp',
@@ -171,6 +196,36 @@ export const WEAPON_DOMAINS = [
 // id matches paimon.moe image filenames: paimon.moe/images/weapons/{id}.png
 // type: Sword|Claymore|Polearm|Catalyst|Bow
 export const WEAPONS = [
+  // ── 3-Star ────────────────────────────────────────────────────────────────
+  // Swords
+  {id:'cool_steel',              name:'Cool Steel',              type:'Sword',    rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'dark_iron_sword',         name:'Dark Iron Sword',         type:'Sword',    rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'fillet_blade',            name:'Fillet Blade',            type:'Sword',    rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'harbinger_of_dawn',       name:'Harbinger of Dawn',       type:'Sword',    rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'skyrider_sword',          name:'Skyrider Sword',          type:'Sword',    rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'travelers_handy_sword',   name:"Traveler's Handy Sword",  type:'Sword',    rarity:3, domainMat:'dandelion_gladiator'},
+  // Claymores
+  {id:'bloodtainted_greatsword', name:'Bloodtainted Greatsword', type:'Claymore', rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'debate_club',             name:'Debate Club',             type:'Claymore', rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'ferrous_shadow',          name:'Ferrous Shadow',          type:'Claymore', rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'skyrider_greatsword',     name:'Skyrider Greatsword',     type:'Claymore', rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'white_iron_greatsword',   name:'White Iron Greatsword',   type:'Claymore', rarity:3, domainMat:'dandelion_gladiator'},
+  // Polearms
+  {id:'black_tassel',            name:'Black Tassel',            type:'Polearm',  rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'halberd',                 name:'Halberd',                 type:'Polearm',  rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'white_tassel',            name:'White Tassel',            type:'Polearm',  rarity:3, domainMat:'dandelion_gladiator'},
+  // Catalysts
+  {id:'emerald_orb',             name:'Emerald Orb',             type:'Catalyst', rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'magic_guide',             name:'Magic Guide',             type:'Catalyst', rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'otherworldly_story',      name:'Otherworldly Story',      type:'Catalyst', rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'thrilling_tales',         name:'Thrilling Tales of Dragon Slayers', type:'Catalyst', rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'twin_nephrite',           name:'Twin Nephrite',           type:'Catalyst', rarity:3, domainMat:'dandelion_gladiator'},
+  // Bows
+  {id:'messenger',               name:'Messenger',               type:'Bow',      rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'raven_bow',               name:'Raven Bow',               type:'Bow',      rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'recurve_bow',             name:'Recurve Bow',             type:'Bow',      rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'sharpshooters_oath',      name:"Sharpshooter's Oath",     type:'Bow',      rarity:3, domainMat:'dandelion_gladiator'},
+  {id:'slingshot',               name:'Slingshot',               type:'Bow',      rarity:3, domainMat:'dandelion_gladiator'},
   // ── 5★ Swords ──
   {id:'mistsplitter_reforged',         name:'Mistsplitter Reforged',           type:'Sword',    rarity:5, domainMat:'narukami'},
   {id:'haran_geppaku_futsu',           name:'Haran Geppaku Futsu',             type:'Sword',    rarity:5, domainMat:'narukami'},

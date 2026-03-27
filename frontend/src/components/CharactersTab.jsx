@@ -56,7 +56,7 @@ function AscTrack({value,onChange}){
   )
 }
 
-function CharCard({charDef,charData,onUpdate,onRemove}){
+export function CharCard({charDef,charData,onUpdate,onRemove}){
   const el    = ELEMENTS[charDef.element]
   const elRgb = el?.rgb||'200,169,110'
   const book  = TALENT_BOOKS[charDef.talentBook]
